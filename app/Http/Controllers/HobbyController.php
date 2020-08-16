@@ -3,10 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Hobby;
+use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
+
 
 class HobbyController extends Controller
-{
+{   
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,10 @@ class HobbyController extends Controller
      */
     public function index()
     {
-        $hobbies = Hobby::all();
+        //$hobbies = Hobby::all();
+        //$hobbies = Hobby::paginate(10);
+        $hobbies = Hobby::orderBy('created_at', 'DESC')->paginate(10);
+
         return view('hobby.index')->with([
             'hobbies' => $hobbies
         ]);
@@ -45,13 +57,20 @@ class HobbyController extends Controller
         
         $hobby = New Hobby([
             'name' => $request['name'],
-            'description' => $request['description']
+            'description' => $request['description'],
+            'user_id' => auth()->id()
         ]);
         $hobby->save();
-
+        /*
         return $this->index()->with(
             [
                 'message_success' => "The hobby <b>" . $hobby->name . "</b> was created."
+            ]
+        );
+        */
+        return redirect('/hobby/' . $hobby->id)->with(
+            [
+                'message_warning' => "Please assign some tags now."
             ]
         );
     }
@@ -64,9 +83,17 @@ class HobbyController extends Controller
      */
     public function show(Hobby $hobby)
     {
+        $allTags = Tag::all();
+        $usedTags = $hobby->tags;
+        $availableTags = $allTags->diff($usedTags);
+
+
         return view('hobby.show')->with([
-            'hobby' => $hobby
-        ]);
+            'hobby' => $hobby,
+            'availableTags' => $availableTags,
+            'message_success' => Session::get('message_success'),
+            'message_warning' => Session::get('message_warning')
+        ]); 
     }
 
     /**
@@ -101,9 +128,11 @@ class HobbyController extends Controller
             'description' => $request['description'],
         ]);
 
-        return redirect()
-                ->route('hobby.index')
-                ->withSuccess("The hobby <b>" . $hobby->name . "</b> was updated.");
+        return $this->index()->with(
+            [
+                'message_success' => "The hobby <b>" . $hobby->name . "</b> was updated."
+            ]
+        );
     }
 
     /**
@@ -116,8 +145,11 @@ class HobbyController extends Controller
     {
         $oldName = $hobby->name;
         $hobby->delete();
-        return redirect()
-                ->route('hobby.index')
-                ->withSuccess("The hobby <b>" . $oldName . "</b> was deleted.");
+
+        return $this->index()->with(
+            [
+                'message_success' => "The hobby <b>" . $hobby->name . "</b> was deleted."
+            ]
+        );
     }
 }

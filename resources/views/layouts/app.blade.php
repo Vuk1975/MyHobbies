@@ -33,9 +33,15 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        @auth
+                        <li><a class="nav-link {{ Request::is('home') ? ' active' : ''}}" href="/home">Home<a></li>
+                        @endauth
+                        @guest
                         <li><a class="nav-link {{ Request::is('/') ? ' active' : ''}}" href="/">Start<a></li>
+                        @endguest
                         <li><a class="nav-link {{ Request::is('info') ? ' active' : ''}}" href="/info">Info<a></li>
                         <li><a class="nav-link {{ Request::is('hobby*') ? ' active' : ''}}" href="/hobby">Hobby<a></li>
+                        <li><a class="nav-link {{ Request::is('tag*') ? ' active' : ''}}" href="/tag">Tags<a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -75,35 +81,33 @@
         </nav>
 
         <main class="py-4">
-        
-        @isset($message_success)    
-        <div class="container">
-            <div class="alert alert-success" role="alert">
-            {!! $message_success !!}
-            </div>  
-        </div>
-        @endisset
 
-        @isset($message_warnings)    
-        <div class="container">
-            <div class="alert alert-warning" role="alert">
-            {!! $message_warnings !!}
-            </div>  
-        </div>
-        @endisset
-
-            @if($errors->any()) 
+            @isset($message_success)
             <div class="container">
-                <div class="alert alert-danger" role="alert">
-                    <ul class="mb-0">
-                    @foreach($errors->all() as $error)
-                        <li>
-                        {!! $error !!}
-                        </li>
-                    @endforeach
-                    </ul>
-                </div>  
+                <div class="alert alert-success" role="alert">
+                    {!! $message_success !!}
+                </div>
             </div>
+            @endisset
+
+            @isset($message_warning)
+                <div class="container">
+                    <div class="alert alert-warning" role="alert">
+                        {!! $message_warning !!}
+                    </div>
+                </div>
+            @endisset
+
+            @if($errors->any())
+                <div class="container">
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{!! $error !!}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             @endif
             @yield('content')
         </main>

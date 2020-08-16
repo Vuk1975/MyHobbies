@@ -26,6 +26,23 @@ Route::get('/test/{name}/{age}', 'HobbyController@index');
 */
 
 Route::resource('hobby', 'HobbyController');
+
+Route::resource('tag', 'TagController');
+
+Route::resource('user', 'UserController');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//filtered view
+
+Route::get('/hobby/tag/{tag_id}', 'HobbyTagController@getFilteredHobbies')->name('hobby_tag');
+
+//attach and detach Tags in hobbies
+
+Route::get('/hobby/{hobby_id}/tag/{tag_id}/attach', 'HobbyTagController@attachTag');
+
+Route::get('/hobby/{hobby_id}/tag/{tag_id}/detach', 'HobbyTagController@detachTag');
+
+
