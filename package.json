@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.13.1",
+        "lightbox2": "^2.11.3",
         "resolve": "^1.17.0",
         "yargs-parser": "^18.1.3"
     }

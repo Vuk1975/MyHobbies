@@ -41,8 +41,16 @@ Route::get('/hobby/tag/{tag_id}', 'HobbyTagController@getFilteredHobbies')->name
 
 //attach and detach Tags in hobbies
 
-Route::get('/hobby/{hobby_id}/tag/{tag_id}/attach', 'HobbyTagController@attachTag');
+Route::get('/hobby/{hobby_id}/tag/{tag_id}/attach', 'HobbyTagController@attachTag')->middleware('auth');
 
-Route::get('/hobby/{hobby_id}/tag/{tag_id}/detach', 'HobbyTagController@detachTag');
+Route::get('/hobby/{hobby_id}/tag/{tag_id}/detach', 'HobbyTagController@detachTag')->middleware('auth');
+
+// Delete images from hobby
+
+Route::get('/delete-images/hobby/{hobby_id}', 'HobbyController@deleteImages');
+
+// Delete images from user
+
+Route::get('/delete-images/user/{user_id}', 'UserController@deleteImages');
 
 

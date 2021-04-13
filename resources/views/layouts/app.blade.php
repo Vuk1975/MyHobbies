@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta name="description" content="@yield('page_description', 'A cool social network to share your hobbies')">
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title> @yield('page_title', 'MyHobbies')</title>
-    <meta name="description" concent="@yield('page_description', 'Description of hobies')"> 
+    <title>@yield('page_title', 'MyHobbies')</title>
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
@@ -34,16 +36,16 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @auth
-                        <li><a class="nav-link {{ Request::is('home') ? ' active' : ''}}" href="/home">Home<a></li>
+                            <li><a class="nav-link{{ Request::is('home') ? ' active' : '' }}" href="/home">Home</a></li>
                         @endauth
-                        @guest
-                        <li><a class="nav-link {{ Request::is('/') ? ' active' : ''}}" href="/">Start<a></li>
-                        @endguest
-                        <li><a class="nav-link {{ Request::is('info') ? ' active' : ''}}" href="/info">Info<a></li>
-                        <li><a class="nav-link {{ Request::is('hobby*') ? ' active' : ''}}" href="/hobby">Hobby<a></li>
-                        <li><a class="nav-link {{ Request::is('tag*') ? ' active' : ''}}" href="/tag">Tags<a></li>
-                    </ul>
 
+                        @guest
+                            <li><a class="nav-link{{ Request::is('/') ? ' active' : '' }}" href="/">Start</a></li>
+                        @endguest
+                        <li><a class="nav-link{{ Request::is('info') ? ' active' : '' }}" href="/info">Info</a></li>
+                        <li><a class="nav-link{{ Request::is('hobby*') ? ' active' : '' }}" href="/hobby">Hobbies</a></li>
+                        <li><a class="nav-link{{ Request::is('tag*') ? ' active' : '' }}" href="/tag">Tags</a></li>
+                    </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -81,7 +83,13 @@
         </nav>
 
         <main class="py-4">
-
+            @if (session()->has('success'))
+            <div class="container">
+                    <div class="alert alert-success">
+                        {{ session()->get('success') }}
+                    </div>
+            </div>
+            @endif
             @isset($message_success)
             <div class="container">
                 <div class="alert alert-success" role="alert">

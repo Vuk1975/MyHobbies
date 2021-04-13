@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Hobby;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -25,13 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // selecting hobbies for autentic user and turn them in descending order by time of updating
         $hobbies = Hobby::select()
             ->where('user_id', auth()->id())
-            ->orderBy('updated_at', 'DESC')
+            ->orderBy('updated_at', "DESC")
             ->get();
-        
+
         return view('home')->with([
-            'hobbies' => $hobbies
+            'hobbies' => $hobbies,
+            'message_success' => Session::get('message_success')
         ]);
     }
 }

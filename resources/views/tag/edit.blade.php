@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -16,7 +17,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="style">Style</label>
-                                <input type="text" class="form-control{{ $errors->has('style') ? ' border-danger' : '' }}" id="style" name="style" value="{{  old('style') ?? $tag->style}}">
+                                <input type="text" class="form-control{{ $errors->has('style') ? ' border-danger' : '' }}" id="style" name="style" value="{{ old('style') ?? $tag->style }}">
                                 <small class="form-text text-danger">{!! $errors->first('style') !!}</small>
                             </div>
                             <input class="btn btn-primary mt-4" type="submit" value="Save Tag">
